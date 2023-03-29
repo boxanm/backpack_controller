@@ -48,7 +48,7 @@ class BackpackController(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         beeper_period = self.base_length
-        distance_update_period = 1.0  # seconds
+        distance_update_period = 0.1  # seconds
         self.beeper_timer = self.create_timer(beeper_period, self.beeper_callback)
         self.distance_update_timer = self.create_timer(distance_update_period, self.timer_callback)
         self.distance_to_traj = None
