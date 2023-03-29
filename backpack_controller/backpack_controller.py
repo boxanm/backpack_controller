@@ -10,21 +10,20 @@ from tf2_ros.transform_listener import TransformListener
 
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
-from preferredsoundplayer import playsound, stopsound
-
+import os
 class BackpackController(Node):
 
     dist_rate_dict = {5.0: 1.0,
                       4.0: 0.7,
                       0.5: 0.5,
-                      0.3: 0.3,
-                      0.2: 0.1,
+                      0.1: 0.3,
+                      0.05: 0.1,
                       0.0: 0.0}
 
     def __init__(self):
         super().__init__('minimal_publisher')
         self.publisher_ = self.create_publisher(String, 'distance_to_path', 10)
-        self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory',
+        self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory_test',
                                                          self.path_callback, 10)
 
         # Declare and acquire `target_frame` parameter
@@ -49,15 +48,20 @@ class BackpackController(Node):
         self.sound_ctr = 0.0
         self.sound = None
 
+    def play_sound(self):
+        duration = 100
+        frequency = 1500
+        os.system('play -n synth %s sin %s' % (duration/1000, frequency))
+
     def beeper_callback(self):
+        if self.path is None:
+            return
         if self.new_ratio_ready and self.sound_ctr == 0.0:
             print(f"new sound ratio ready: {self.sound_ratio}, new: {self.new_sound_ratio}")
             self.sound_ratio = self.new_sound_ratio
-        if self.sound is not None:
-            stopsound(self.sound)
 
         if self.sound_ctr < self.sound_ratio:
-            self.sound = playsound('../resource/beep.wav')
+            self.play_sound()
             print(f"playing sound {self.sound_ctr}")
         else:
             print(f'not playing sound {self.sound_ctr}')
