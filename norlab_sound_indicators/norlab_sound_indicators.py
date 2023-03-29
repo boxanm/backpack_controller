@@ -14,8 +14,8 @@ import os
 import time
 from threading import Lock
 
-class BackpackController(Node):
 
+class BackpackController(Node):
     frequency = 1500
     base_length = 1.0
     base_duration = 0.1
@@ -30,8 +30,15 @@ class BackpackController(Node):
     def __init__(self):
         super().__init__('norlab_sound_indicators')
         self.publisher_ = self.create_publisher(String, 'distance_to_path', 10)
+
+        qos_profile = rclpy.qos.QoSProfile(
+            reliability=rclpy.qos.QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
+            durability=rclpy.qos.QoSDurabilityPolicy.RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL,
+            history=rclpy.qos.QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
+            depth=1
+        )
         self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory_test',
-                                                         self.path_callback, 10)
+                                                         self.path_callback, 10, qos_profile)
 
         # Declare and acquire `target_frame` parameter
         self.target_frame = self.declare_parameter(
@@ -78,8 +85,10 @@ class BackpackController(Node):
             pause_count = sound_count
         pause_dur_indiv = pause_dur_total / pause_count
 
-        print(f"Playing sound for distance {self.distance_to_traj} with ratio {self.ratio}: sound_dur_ind {sound_dur_indiv}, pause_dur_ind {pause_dur_indiv}")
-        print(f"Total sound dur {sound_dur_total} with count {sound_count} total pause dur {pause_dur_total} with count {pause_count}")
+        print(
+            f"Playing sound for distance {self.distance_to_traj} with ratio {self.ratio}: sound_dur_ind {sound_dur_indiv}, pause_dur_ind {pause_dur_indiv}")
+        print(
+            f"Total sound dur {sound_dur_total} with count {sound_count} total pause dur {pause_dur_total} with count {pause_count}")
 
         self.ratio_mutex.release()
         self.play_sound(sound_dur_indiv, pause_dur_indiv, int(sound_count))
@@ -148,4 +157,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
