@@ -35,10 +35,10 @@ class BackpackController(Node):
             reliability=rclpy.qos.QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
             durability=rclpy.qos.QoSDurabilityPolicy.RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL,
             history=rclpy.qos.QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
-            depth=1
+            depth=10
         )
         self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory_test',
-                                                         self.path_callback, 10, qos_profile)
+                                                         self.path_callback, qos_profile)
 
         # Declare and acquire `target_frame` parameter
         self.target_frame = self.declare_parameter(
