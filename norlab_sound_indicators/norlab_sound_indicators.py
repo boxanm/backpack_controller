@@ -32,9 +32,9 @@ class BackpackController(Node):
         self.publisher_ = self.create_publisher(String, 'distance_to_path', 10)
 
         qos_profile = rclpy.qos.QoSProfile(
-            reliability=rclpy.qos.QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
-            durability=rclpy.qos.QoSDurabilityPolicy.RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL,
-            history=rclpy.qos.QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
+            reliability=rclpy.qos.ReliabilityPolicy.BEST_EFFORT,
+            durability=rclpy.qos.DurabilityPolicy.TRANSIENT_LOCAL,
+            history=rclpy.qos.HistoryPolicy.KEEP_LAST,
             depth=10
         )
         self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory_test',
