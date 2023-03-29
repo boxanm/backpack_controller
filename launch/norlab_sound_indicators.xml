@@ -1,0 +1,9 @@
+<launch>
+
+	<node pkg="norlab_sound_indicators" exec="norlab_sound_indicators.py" name="norlab_sound_indicators" output="screen" >
+<!--		<remap from="planned_trajectory" to="" />-->
+		<param name="frequency" value="1500.0"/>
+		<param name="base_interval" value="1.0"/>
+	</node>
+
+</launch>

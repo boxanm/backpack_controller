@@ -35,9 +35,9 @@ class BackpackController(Node):
             reliability=rclpy.qos.ReliabilityPolicy.RELIABLE,
             durability=rclpy.qos.DurabilityPolicy.TRANSIENT_LOCAL,
             history=rclpy.qos.HistoryPolicy.KEEP_LAST,
-            depth=10
-        )
-        self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory_test',
+            depth=10)
+
+        self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory',
                                                          self.path_callback, qos_profile)
 
         # Declare and acquire `target_frame` parameter
@@ -85,10 +85,8 @@ class BackpackController(Node):
             pause_count = sound_count
         pause_dur_indiv = pause_dur_total / pause_count
 
-        print(
-            f"Playing sound for distance {self.distance_to_traj} with ratio {self.ratio}: sound_dur_ind {sound_dur_indiv}, pause_dur_ind {pause_dur_indiv}")
-        print(
-            f"Total sound dur {sound_dur_total} with count {sound_count} total pause dur {pause_dur_total} with count {pause_count}")
+        self.get_logger().debug(
+            f"Playing sound for distance {self.distance_to_traj} with ratio {self.ratio}")
 
         self.ratio_mutex.release()
         self.play_sound(sound_dur_indiv, pause_dur_indiv, int(sound_count))
@@ -122,7 +120,6 @@ class BackpackController(Node):
         msg = String()
         msg.data = f'Distance to target: {self.distance_to_traj}'
         self.publisher_.publish(msg)
-        self.get_logger().info(msg.data)
 
     def path_callback(self, path):
         if not path.poses:
@@ -138,19 +135,13 @@ class BackpackController(Node):
     def compute_dist_to_traj(self, curr_pos):
         # knn implementation
         distance_mat, neighbours_mat = self.knn.kneighbors(curr_pos.reshape(1, -1))
-        print(distance_mat)
         return distance_mat[0][0]
 
 
 def main(args=None):
     rclpy.init(args=args)
     norlab_sound_indicators = BackpackController()
-
     rclpy.spin(norlab_sound_indicators)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
     norlab_sound_indicators.destroy_node()
     rclpy.shutdown()
 
