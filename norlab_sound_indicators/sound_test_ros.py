@@ -107,14 +107,14 @@ class BackpackController(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    backpack_controller = BackpackController()
+    norlab_sound_indicators = BackpackController()
 
-    rclpy.spin(backpack_controller)
+    rclpy.spin(norlab_sound_indicators)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    backpack_controller.destroy_node()
+    norlab_sound_indicators.destroy_node()
     rclpy.shutdown()
 
 

@@ -28,7 +28,7 @@ class BackpackController(Node):
                       0.0: 0.1}
 
     def __init__(self):
-        super().__init__('backpack_controller')
+        super().__init__('norlab_sound_indicators')
         self.publisher_ = self.create_publisher(String, 'distance_to_path', 10)
         self.path_subscriber_ = self.create_subscription(Path, 'planned_trajectory_test',
                                                          self.path_callback, 10)
@@ -135,14 +135,14 @@ class BackpackController(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    backpack_controller = BackpackController()
+    norlab_sound_indicators = BackpackController()
 
-    rclpy.spin(backpack_controller)
+    rclpy.spin(norlab_sound_indicators)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    backpack_controller.destroy_node()
+    norlab_sound_indicators.destroy_node()
     rclpy.shutdown()
 
 

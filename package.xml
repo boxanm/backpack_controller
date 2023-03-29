@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>backpack_controller</name>
+  <name>norlab_sound_indicators</name>
   <version>0.0.0</version>
-  <description>Basic backpack 'controller' playing sound</description>
+  <description>Beeping controller quality indicator</description>
   <maintainer email="matej.boxan@gmail.com">user</maintainer>
   <license>Apache License 2.0</license>
 
@@ -11,6 +11,8 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>numpy</exec_depend>
+  <exec_depend>scikit-learn</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>

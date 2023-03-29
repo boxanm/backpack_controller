@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'backpack_controller'
+package_name = 'norlab_sound_indicators'
 
 setup(
     name=package_name,
@@ -8,19 +8,19 @@ setup(
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
+            ['resource/']),
+        ('share/', ['package.xml']),
     ],
-    install_requires=['setuptools', 'scikit-learn', 'numpy', 'preferredsoundplayer'],
+    install_requires=['setuptools', 'scikit-learn', 'numpy'],
     zip_safe=True,
     maintainer='Matej Boxan',
     maintainer_email='matej.boxan@gmail.com',
-    description='Basic backpack controller playing sound',
+    description='Beeping controller quality indicator',
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'backpack_controller = backpack_controller.backpack_controller:main'
+            'norlab_sound_indicators = norlab_sound_indicators.norlab_sound_indicators:main'
         ],
     },
 )
