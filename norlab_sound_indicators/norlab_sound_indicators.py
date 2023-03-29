@@ -32,7 +32,7 @@ class BackpackController(Node):
         self.publisher_ = self.create_publisher(String, 'distance_to_path', 10)
 
         qos_profile = rclpy.qos.QoSProfile(
-            reliability=rclpy.qos.ReliabilityPolicy.BEST_EFFORT,
+            reliability=rclpy.qos.ReliabilityPolicy.RELIABLE,
             durability=rclpy.qos.DurabilityPolicy.TRANSIENT_LOCAL,
             history=rclpy.qos.HistoryPolicy.KEEP_LAST,
             depth=10
