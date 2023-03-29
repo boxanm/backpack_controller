@@ -11,7 +11,6 @@ from tf2_ros.transform_listener import TransformListener
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
 import os
-import time
 from threading import Lock
 
 
@@ -58,16 +57,17 @@ class BackpackController(Node):
         self.path = None
         self.ratio_mutex = Lock()
         self.get_logger().info("Waiting for path message")
+        self.pause_executor = rclpy.executors.SingleThreadedExecutor()
 
     def play_sound(self, sound_dur, pause_dur, count):
         if sound_dur * count == self.base_length:
             os.system(f'play -n synth {self.base_length} sin {self.frequency} >/dev/null 2>&1')
         elif pause_dur * count == self.base_length:
-            time.sleep(self.base_length)
+            self.pause_executor.spin_once(timeout_sec=self.base_length)
         else:
             for i in range(count):
                 os.system(f'play -n synth {sound_dur} sin {self.frequency} >/dev/null 2>&1')
-                time.sleep(pause_dur)
+                self.pause_executor.spin_once(timeout_sec=pause_dur)
 
     def beeper_callback(self):
         if self.path is None or self.ratio is None:

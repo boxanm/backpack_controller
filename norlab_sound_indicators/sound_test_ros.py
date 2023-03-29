@@ -2,22 +2,18 @@ import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import String
-from nav_msgs.msg import Path
 
-from tf2_ros import TransformException
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
 
 from sklearn.neighbors import NearestNeighbors
-import numpy as np
 import os
-import time
 from threading import Lock
 
 class BackpackController(Node):
 
     frequency = 1500
-    base_length = 10.0
+    base_length = 2.0
     base_duration = 0.1
     dist_rate_dict = {5.0: 1.0,
                       4.0: 0.8,
@@ -48,16 +44,17 @@ class BackpackController(Node):
         self.ratio = None
         self.ratio_mutex = Lock()
         self.get_logger().info("Waiting for distance message")
+        self.pause_executor = rclpy.executors.SingleThreadedExecutor()
 
     def play_sound(self, sound_dur, pause_dur, count):
         if sound_dur * count == self.base_length:
             os.system(f'play -n synth {self.base_length} sin {self.frequency} >/dev/null 2>&1')
         elif pause_dur * count == self.base_length:
-            time.sleep(self.base_length)
+            self.pause_executor.spin_once(timeout_sec=self.base_length)
         else:
             for i in range(count):
                 os.system(f'play -n synth {sound_dur} sin {self.frequency} >/dev/null 2>&1')
-                time.sleep(pause_dur)
+                self.pause_executor.spin_once(timeout_sec=pause_dur)
 
     def beeper_callback(self):
         if self.distance_to_traj is None or self.ratio is None:
