@@ -17,7 +17,7 @@ from threading import Lock
 class BackpackController(Node):
 
     frequency = 1500
-    base_length = 10.0
+    base_length = 1.0
     base_duration = 0.1
     dist_rate_dict = {5.0: 1.0,
                       4.0: 0.8,
